@@ -17,6 +17,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
+#include <ctype.h>
 
 #define BUFFER_SIZE 256 //or 1 << 8
 #define ARR_SIZE 256
@@ -47,6 +48,9 @@ int main (int argc, const char * argv[])
 {
     char buffer[BUFFER_SIZE];
     char *args[ARR_SIZE];
+    int return_status;
+    
+    pid_t   pid = 0;
     
     size_t  numArgs;
     
@@ -63,13 +67,42 @@ int main (int argc, const char * argv[])
         //Parse the command input
         parseInput(buffer, args, ARR_SIZE, &numArgs);
         
-        printf("You entered: %s\n", buffer);
+        printf("Command: %s\nNum. Args: %lu\n", args[0],numArgs);
         
         if (numArgs == 0) continue;
+        
         if (!strcmp(args[0], "exit")) exit(0);
         
+        if (!strcmp(args[0], "sleep") && (numArgs > 1))
+        {
+            long sleepVal;
+            if (!(sleepVal = strtol(args[1], NULL, 10)))
+            {
+                printf("Incorrect Args\n"); 
+                continue;
+            }
+                
+            if ((pid = fork()) < 0) 
+            {
+                printf("Failed to fork process 1\n");
+                break;
+            }
+            
+            if (!pid) // We're the child process
+            {
+                sleep(sleepVal);
+                break;
+            }
+            else 
+            {
+                printf("Child going to sleep for %lds!\n", sleepVal);
+                printf("Waiting for child (%d)\n", pid);
+                pid = wait(&return_status);
+                printf("Child (%d) finished with status %d.\n",pid, return_status);
+            }
+        }
         
-        if ((checkCmdList(cmdList, args[0]) == 0)) printf("Command Found!\n");
+        //if ((checkCmdList(cmdList, args[0]) == 0)) printf("Command Found!\n");
         
     }
 }
@@ -83,6 +116,7 @@ int main (int argc, const char * argv[])
 
 // Input parser function
 // Copyright Enrico Franchi © 2005
+// Used under BSD License
 // http://rik0.altervista.org/snippets/parse_args.html
 
 
