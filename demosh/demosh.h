@@ -82,8 +82,9 @@ int getCommandCode(char *commandName);
 
 int cmdSleep(Process_t *psList, Command_t *cmd);
 
-Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid, time_t start);
+Process_t *createProcess(Process_t *root, char *command, 
+                         char **argv, pid_t pid, time_t start);
 
 void list(Process_t *root);
 
-void cmdTime(Process_t * psList, Command_t *cmd);
+int cmdTime(Process_t * psList, Command_t *cmd);

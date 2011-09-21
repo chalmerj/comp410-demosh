@@ -29,6 +29,7 @@ int main (int argc, const char * argv[])
     char buffer[MAX_BUFFER];
     Command_t cmd = {NULL, 0, {NULL}};
     Process_t *psList;
+    int runningTime = 0;
     
     memset((void *)&psList, 0, sizeof(psList));
     
@@ -78,7 +79,16 @@ int main (int argc, const char * argv[])
                 }
                 
             case CMD_TIME:
-                cmdTime(psList,&cmd);
+                runningTime = cmdTime(psList,&cmd);
+                if (0 < runningTime)
+                {
+                    printf("PID %s running for %ds.\n",
+                           cmd.argv[1],runningTime); 
+                }
+                else
+                {
+                    printf("Time Error\n");
+                }
             
             default:
                 break;

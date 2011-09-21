@@ -84,7 +84,8 @@ int getCommandCode(char *commandName)
  *
  */
 
-Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid, time_t start)
+Process_t *createProcess(Process_t *root, char *command, 
+                         char **argv, pid_t pid, time_t start)
 {
     Process_t  *temp;
     
@@ -193,7 +194,7 @@ int cmdSleep(Process_t *psList, Command_t *cmd)
         else if (pid > 0)
         {
             time(&startTime);
-            
+            //printf("Sleep Arg %s\n",cmd->argv[1]);
             createProcess(psList, cmd->command, cmd->argv, pid,startTime );
         }
         
@@ -207,9 +208,18 @@ int cmdSleep(Process_t *psList, Command_t *cmd)
     return 0;
 }
 
+/*
+ * The cmdTime process (named to avoid overloading system time())
+ * takes in the root of the process list and the given command,
+ * parses the argument for a PID and searches the process list.
+ * If the PID is found, it compares the start time of the process
+ * with current time, and returns that value. It returns 0 if the
+ * PID is not found, -1 if error is reached.
+ *
+ */
 
 
-void cmdTime(Process_t *psList, Command_t *cmd)
+int cmdTime(Process_t *psList, Command_t *cmd)
 {
     time_t now;
     Process_t *current;
@@ -218,25 +228,28 @@ void cmdTime(Process_t *psList, Command_t *cmd)
     if ((cmd->argc <= 1) || (!isdigit(*cmd->argv[1])))
     {
         printf("Incorrect Args for Time Command - 'time PID'\n");
+        return -1;
     } 
     else if ((cmd->argc > 1) && (isdigit(*cmd->argv[1])))
     {
-        pid = *cmd->argv[1];
+        pid = atol(cmd->argv[1]);
         
         if ((pid > 0) && (NULL != psList))
         {
-            for (psList = current; current; current=current->next)
+            for (current = psList; current; current=current->next)
             {
                 if (pid == current->pid)
                 {
                     time(&now);
-                    printf("%d running for %lus.\n",(int)current->pid,(long)(now-current->start));
-                    break;
+                    return (int)(now-current->start);
                 }
+
             }
             printf("PID %d not found.\n",pid);
+            return 0;
         }
     }
+    return -1;
 }
 
 
