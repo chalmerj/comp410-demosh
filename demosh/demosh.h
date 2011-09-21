@@ -21,13 +21,14 @@
 
 #define CMD_EXIT 100
 #define CMD_SLEEP 1
-#define CMD_WAIT 2
-#define CMD_WAITLIST 3
-#define CMD_TIME 4
-#define CMD_KILL 5
+#define CMD_LIST 2
+#define CMD_WAIT 3
+#define CMD_WAITLIST 4
+#define CMD_TIME 5
+#define CMD_KILL 6
 
 // How many built-in commands are there?
-#define NUM_CMDS 6
+#define NUM_CMDS 7
 
 
 typedef struct builtins_s {
@@ -49,6 +50,23 @@ typedef struct command_s {
     int cmdCode;
 }Command_t;
 
+/*
+ * Data about each process forked from the parent is stored
+ * in a process struct. 
+ */
+
+typedef struct process {
+    struct process *next;   // Pointer to next process in the list. Parent is root.
+    char *command;          // Command string used to start the process
+    char **argv;            // Argument Vector used for exec-ing the process
+    pid_t pid;              // Process ID
+    time_t start;           // Timestamp (in seconds) of process start
+    char completed;         // True if process has completed
+    int status;             // Reported status value
+}Process_t;
+
+
+
 
 //Prototypes
 
@@ -61,3 +79,7 @@ typedef struct command_s {
 
 void parseInput(char *input, Command_t *cmds);
 int getCommandCode(char *commandName);
+
+void cmdSleep(int *time);
+Process_t *createProcess(Process_t *next, char *command, char **argv, pid_t pid);
+void list(Process_t *root);

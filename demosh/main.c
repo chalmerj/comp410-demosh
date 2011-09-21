@@ -25,6 +25,12 @@ int main (int argc, const char * argv[])
 {
     char buffer[MAX_BUFFER];
     Command_t cmd = {NULL, 0, {NULL}};
+    Process_t *psList;
+    
+    memset((void *)&psList, 0, sizeof(psList));
+    
+    psList = createProcess(psList, "Parent", NULL, getpid());
+        
        
     //pid_t   pid = 0;
     
@@ -41,8 +47,24 @@ int main (int argc, const char * argv[])
         //Parse the command input
         parseInput(buffer, &cmd);
         
-        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
-        printf("Command Code:%d\n",cmd.cmdCode);
+//        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
+//        printf("Command Code:%d\n",cmd.cmdCode);
+        
+        switch (cmd.cmdCode)
+        {
+            case 0:
+                break;
+                
+            case CMD_EXIT:
+                return 0;
+            
+            case CMD_LIST:
+                list(psList);
+            
+            default:
+                break;
+                    
+        }
 
     }
 }

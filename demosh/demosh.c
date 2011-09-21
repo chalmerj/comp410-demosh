@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <ctype.h>
+#include <time.h>
 #include "demosh.h"
 
 
@@ -21,6 +22,7 @@
 Builtins_t cmdList[NUM_CMDS] = {
     {"exit", CMD_EXIT},
     {"sleep", CMD_SLEEP},
+    {"list", CMD_LIST},
     {"wait", CMD_WAIT},
     {"wait-list", CMD_WAITLIST},
     {"time", CMD_TIME},
@@ -73,3 +75,76 @@ int getCommandCode(char *commandName)
     }
     return 0;
 }
+
+/*
+ * createProcess creates a new process list node, 
+ * returning a pointer to that node.
+ *
+ */
+
+Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid)
+{
+    Process_t  *temp;
+    
+    if (NULL == root)
+    {
+        root = (Process_t *) malloc(sizeof(Process_t));
+        if (NULL == root) exit(0);
+        
+        root->next = NULL;
+        root->command = command;
+        root->argv = argv;
+        root->pid = pid;
+        root->start = time(NULL);
+        root->completed = 0;
+        root->status = 0;
+        
+    }
+    else
+    {
+        temp = root;
+        while (temp->next)temp = temp->next;
+        
+        temp->next = (Process_t *) malloc(sizeof(Process_t));
+        if (NULL == temp->next) exit(0);
+        
+        temp = temp->next;
+        temp->command = command;
+        temp->argv = argv;
+        temp->pid = pid;
+        temp->start = time(NULL);
+        temp->completed = 0;
+        temp->status = 0;
+        
+    }
+    return root;
+}
+
+/*
+ * Prints a list of all processes.
+ *
+ */
+
+void list(Process_t *root)
+{
+    Process_t *current;
+    current = (NULL != root)?root:NULL;
+    
+    while(current)
+    {
+        printf("Command: %s\t",current->command);
+        //printf("Argument: %s\t",current->argv[1]);
+        printf("PID: %d\t",current->pid);
+        printf("Start: %ld\n",current->start);
+        printf("------------\n");
+        
+        current = current->next;
+        
+    }
+    
+}
+
+
+
+
+
