@@ -14,6 +14,8 @@
 #include <signal.h>
 #include <ctype.h>
 #include <time.h>
+#include <sys/wait.h>
+
 #include "demosh.h"
 
 
@@ -82,7 +84,7 @@ int getCommandCode(char *commandName)
  *
  */
 
-Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid)
+Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid, time_t start)
 {
     Process_t  *temp;
     
@@ -95,7 +97,7 @@ Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid)
         root->command = command;
         root->argv = argv;
         root->pid = pid;
-        root->start = time(NULL);
+        root->start = start;
         root->completed = 0;
         root->status = 0;
         
@@ -112,7 +114,7 @@ Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid)
         temp->command = command;
         temp->argv = argv;
         temp->pid = pid;
-        temp->start = time(NULL);
+        temp->start = start;
         temp->completed = 0;
         temp->status = 0;
         
@@ -130,13 +132,19 @@ void list(Process_t *root)
     Process_t *current;
     current = (NULL != root)?root:NULL;
     
+    printf("Command\t\tArgument\t\tPID\t\t\tStart\n");
+    
     while(current)
     {
-        printf("Command: %s\t",current->command);
-        //printf("Argument: %s\t",current->argv[1]);
-        printf("PID: %d\t",current->pid);
-        printf("Start: %ld\n",current->start);
-        printf("------------\n");
+        printf("%s\t\t",current->command);
+        
+        if (NULL != current->argv)
+            printf("%-8s\t\t",current->argv[1]);
+        else
+            printf("(null)\t\t");
+        
+        printf("%-6i\t\t",current->pid);
+        printf("%ld\n",current->start);
         
         current = current->next;
         
@@ -144,6 +152,92 @@ void list(Process_t *root)
     
 }
 
+
+/*
+ * cmdSleep (named such to avoid overloading system sleep()) 
+ * checks for valid input, forks a thread, sends it to sleep,
+ * and the Parent thread creates a new process in the process list.
+ *
+ * It returns 0 if successful, 1 if something went wrong.
+ */
+
+
+
+
+int cmdSleep(Process_t *psList, Command_t *cmd)
+{
+    int pid;
+    time_t startTime;
+    
+    if ((cmd->argc <= 1) || (!isdigit(*cmd->argv[1])))
+    {
+        printf("Incorrect Args for Sleep Command - 'sleep int'\n");
+        return 1;
+    } 
+    
+    else if ((cmd->argc > 1) && (isdigit(*cmd->argv[1])))
+    {
+        // Fork the process
+        if ((pid = fork()) < 0) 
+        {
+            printf("Failed to fork process\n");
+            return 1;
+        }
+        // We're the child process
+        if (0 == pid)
+        {
+            sleep(*cmd->argv[1]);
+            exit(0);
+        }
+        //We're the parent process
+        else if (pid > 0)
+        {
+            time(&startTime);
+            
+            createProcess(psList, cmd->command, cmd->argv, pid,startTime );
+        }
+        
+        else
+        {
+            printf("Error!");
+            return 1;
+        }
+    }
+    
+    return 0;
+}
+
+
+
+void cmdTime(Process_t *psList, Command_t *cmd)
+{
+    time_t now;
+    Process_t *current;
+    int pid;
+        
+    if ((cmd->argc <= 1) || (!isdigit(*cmd->argv[1])))
+    {
+        printf("Incorrect Args for Time Command - 'time PID'\n");
+    } 
+    else if ((cmd->argc > 1) && (isdigit(*cmd->argv[1])))
+    {
+        pid = *cmd->argv[1];
+        
+        if ((pid > 0) && (NULL != psList))
+        {
+            for (psList = current; current; current=current->next)
+            {
+                if (pid == current->pid)
+                {
+                    time(&now);
+                    printf("%d running for %lus.\n",(int)current->pid,(long)(now-current->start));
+                    break;
+                }
+            }
+            printf("PID %d not found.\n",pid);
+        }
+    }
+}
 
 
 

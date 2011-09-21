@@ -18,6 +18,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <ctype.h>
+#include <time.h>
+#include <sys/wait.h>
+
 #include "demosh.h"
 
 
@@ -29,7 +32,7 @@ int main (int argc, const char * argv[])
     
     memset((void *)&psList, 0, sizeof(psList));
     
-    psList = createProcess(psList, "Parent", NULL, getpid());
+    psList = createProcess(psList, "Parent", NULL, getpid(), time(NULL));
         
        
     //pid_t   pid = 0;
@@ -60,6 +63,22 @@ int main (int argc, const char * argv[])
             
             case CMD_LIST:
                 list(psList);
+                break;
+            
+            case CMD_SLEEP:
+                if (!cmdSleep(psList, &cmd))
+                {
+                    printf("Sleep thread created\n");
+                    break;
+                }
+                else
+                {
+                    printf("Sleep thread failed\n");
+                    break;
+                }
+                
+            case CMD_TIME:
+                cmdTime(psList,&cmd);
             
             default:
                 break;

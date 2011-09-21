@@ -80,6 +80,10 @@ typedef struct process {
 void parseInput(char *input, Command_t *cmds);
 int getCommandCode(char *commandName);
 
-void cmdSleep(int *time);
-Process_t *createProcess(Process_t *next, char *command, char **argv, pid_t pid);
+int cmdSleep(Process_t *psList, Command_t *cmd);
+
+Process_t *createProcess(Process_t *root, char *command, char **argv, pid_t pid, time_t start);
+
 void list(Process_t *root);
+
+void cmdTime(Process_t * psList, Command_t *cmd);
