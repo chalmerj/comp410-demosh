@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		744C1BD014298C8B0054E56B /* demosh.c in Sources */ = {isa = PBXBuildFile; fileRef = 744C1BCF14298C8B0054E56B /* demosh.c */; };
 		74A65F5C1427F26F00BB9F81 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 74A65F5B1427F26F00BB9F81 /* main.c */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		744C1BCD14297B280054E56B /* demosh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = demosh.h; sourceTree = "<group>"; };
+		744C1BCF14298C8B0054E56B /* demosh.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = demosh.c; sourceTree = "<group>"; };
 		74A65F571427F26E00BB9F81 /* demosh */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = demosh; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A65F5B1427F26F00BB9F81 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		74A65F5D1427F27000BB9F81 /* demosh.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = demosh.1; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				74A65F5B1427F26F00BB9F81 /* main.c */,
+				744C1BCF14298C8B0054E56B /* demosh.c */,
 				744C1BCD14297B280054E56B /* demosh.h */,
 				74A65F631429664100BB9F81 /* TODO */,
 				74A65F5D1427F27000BB9F81 /* demosh.1 */,
@@ -94,7 +97,7 @@
 		74A65F4E1427F26C00BB9F81 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = "Loyola University";
+				ORGANIZATIONNAME = "Jeremy Chalmer";
 			};
 			buildConfigurationList = 74A65F511427F26C00BB9F81 /* Build configuration list for PBXProject "demosh" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -119,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74A65F5C1427F26F00BB9F81 /* main.c in Sources */,
+				744C1BD014298C8B0054E56B /* demosh.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
