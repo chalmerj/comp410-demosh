@@ -18,15 +18,12 @@
 #include <unistd.h>
 #include <signal.h>
 #include <ctype.h>
-
-#define BUFFER_SIZE 256 //or 1 << 8
-#define ARR_SIZE 256
-#define DELIMS " \t\r\n"
+#include "demosh.h"
 
 
-//Prototypes
-int checkCmdList(char *cmdList[], char *input);     // Iterates through the command list, returning 0 if 'input' is in the list
-void parseInput(char *buffer, char **args, size_t args_size, size_t *numArgs);  //Uses strsep() to parse the buffer into an argument vector
+
+
+
 
 
 char *cmdList[] = {
@@ -84,7 +81,7 @@ int main (int argc, const char * argv[])
                 
             if ((pid = fork()) < 0) 
             {
-                printf("Failed to fork process 1\n");
+                printf("Failed to fork process\n");
                 break;
             }
             
