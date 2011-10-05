@@ -1,0 +1,64 @@
+1. Think about using an enum list for the command indices rather than #defines.
+They're easier to add to, and the compiler will do type checking for you. 
+
+2. In the Command_t structure, you do realize that "char *argv[MAX_BUFFER]"
+gives you an array of MAX_BUFFER pointers to characters inside each structure
+instance you have. This is probably not what you meant. I think you meant
+"char *argv[MAX_ARGS]" where MAX_ARGS is something on the order of 32. I
+doubt that you'll have more arguments than that on the command line. Using
+MAX_BUFFERS and assuming 32=bit pointers means each structure would be over
+1K in size.
+
+3. When you want to fill in the Builtins_t cmdList[] array, change the
+Builtins_t type to be simply:
+
+typedef char *builtins_a[] Builtins_t;
+
+and use the construction:
+
+Builtins_t cmdList[] = {
+[CMD_EXIT]  = "exit",
+[CMD_SLEEP] = "sleep",
+...
+[CMD_KILL]  = "kill"
+}; 
+
+This allows the compiler to order things in the array according to the order
+of the enums that you use for indices, rather than your needing to actually
+put them in in a particular order. However, if you do this, make sure that
+the last value in the enum list (CMD_EXIT in your case) is actually the next
+higher value in the list, rather than some arbitrarily large number.
+Otherwise the compiler will happily make you a very large array that will be
+rather sparse :)  .
+
+About the only downside to that construction is that if you add items to the
+enum list in the middle, it becomes inconsistent with older code. You
+certainly don't need to worry about that for this exercise - but
+non-disruptive upgrades are EMC's bread-and-butter, so it's the kind of thing
+I worry about all the time. On the plus side, it's waaaaay more convenient,
+and always keeps the array in the correct index order (as long as you allow
+the default numbering of the enum list of indices and start at 0).
+
+As a hint for enum lists used for this purpose, always start the first entry
+with something like: E_ALWAYS_ZERO = 0, and always end the list with
+something like: E_COMMAND_NOT_FOUND and never use these for anything real.
+You can always test index values as:
+
+((E_ALWAYS_ZERO < X) && (E_COMMAND_NOT_FOUND > X)) 
+
+as a sanity check for good indices that way, regardless of how many entries
+you put into the list.
+
+4. Change the type of the return value for getCommandCode() to return the enum
+type that you declared as your command code enum list (assuming that you do
+this). That way you can name the final enum E_COMMAND_NOT_FOUND, and use that
+as the max value for i in the for() loop. Also, and since you don't have
+NUM_CMDS actually defined anywhere, much better, use:
+
+for( i = E_ALWAYS_ZERO; i < E_COMMAND_NOT_FOUND; i++)
+
+and simply return i at the end if you haven't returned from the inside of the
+loop. That way, you can add commands as you wish, and you'll never need to
+modify the getCommandCode() function.
+
+I'm sure I'll have more, but it's bedtime...

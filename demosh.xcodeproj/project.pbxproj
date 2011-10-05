@@ -24,6 +24,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		743109A4143D0F2D008E3038 /* Review Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Review Notes"; sourceTree = "<group>"; };
 		744C1BCD14297B280054E56B /* demosh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = demosh.h; sourceTree = "<group>"; };
 		744C1BCF14298C8B0054E56B /* demosh.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = demosh.c; sourceTree = "<group>"; };
 		74A65F571427F26E00BB9F81 /* demosh */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = demosh; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +65,7 @@
 			children = (
 				74A65F5B1427F26F00BB9F81 /* main.c */,
 				744C1BCF14298C8B0054E56B /* demosh.c */,
+				743109A4143D0F2D008E3038 /* Review Notes */,
 				744C1BCD14297B280054E56B /* demosh.h */,
 				74A65F631429664100BB9F81 /* TODO */,
 				74A65F5D1427F27000BB9F81 /* demosh.1 */,
