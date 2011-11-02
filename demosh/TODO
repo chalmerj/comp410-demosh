@@ -2,3 +2,5 @@
 #TODO
 -- Fix cmd.argv passing, which will fix listing the arguments
 -- Add wait(), waitlist() and kill().
+-- Change to doubly-linked list
+-- 

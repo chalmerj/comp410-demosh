@@ -9,6 +9,7 @@
 //  http://stackoverflow.com/questions/7150755/help-implementing-gnu-readline-in-c (user: rahmu)
 
 #define MAX_BUFFER 256
+#define MAX_ARGS 32
 #define ARR_SIZE 256
 #define DELIMS " \t\r\n"
 
@@ -26,9 +27,10 @@
 #define CMD_WAITLIST 4
 #define CMD_TIME 5
 #define CMD_KILL 6
+#define CMD_HELP 7
 
 // How many built-in commands are there?
-#define NUM_CMDS 7
+#define NUM_CMDS 8
 
 
 typedef struct builtins_s {
@@ -46,7 +48,7 @@ typedef struct builtins_s {
 typedef struct command_s {
     char *command;
     int argc;
-    char *argv[MAX_BUFFER];
+    char *argv[MAX_ARGS];
     int cmdCode;
 }Command_t;
 

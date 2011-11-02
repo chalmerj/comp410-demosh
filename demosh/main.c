@@ -51,7 +51,7 @@ int main (int argc, const char * argv[])
         //Parse the command input
         parseInput(buffer, &cmd);
         
-//        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
+        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
 //        printf("Command Code:%d\n",cmd.cmdCode);
         
         switch (cmd.cmdCode)
@@ -90,6 +90,18 @@ int main (int argc, const char * argv[])
                     printf("Time Error\n");
                 }
             
+            case CMD_HELP:
+                printf("List of Commands:\n");
+                printf("list - list the running threads.\n");
+                printf("sleep n - create a new sleeping thread for 'n' seconds.\n");
+                printf("time PID - give the current running time for thread PID.\n");
+                printf("wait PID - block execution until thread PID terminates.\n");
+                printf("wait-list PID PID ... - block execution until each PID given terminates.\n");
+                printf("kill PID - terminates thread PID.\n");
+                printf("exit - exit the program.\n");
+                printf("help  - print this help.\n");
+                
+                
             default:
                 break;
                     

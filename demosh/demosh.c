@@ -28,12 +28,13 @@ Builtins_t cmdList[NUM_CMDS] = {
     {"wait", CMD_WAIT},
     {"wait-list", CMD_WAITLIST},
     {"time", CMD_TIME},
-    {"kill", CMD_KILL}
+    {"kill", CMD_KILL},
+    {"help", CMD_HELP}
 };
 
 /* 
  * This parser takes an input string and fills a command_t struct.
- * It uses strlen instead of strtok, as strtok_r is missing on Minix.
+ * It uses strsep instead of strtok, as strtok_r is missing on Minix.
  * 
 */
 
@@ -106,7 +107,7 @@ Process_t *createProcess(Process_t *root, char *command,
     else
     {
         temp = root;
-        while (temp->next)temp = temp->next;
+        while (temp->next) temp = temp->next;
         
         temp->next = (Process_t *) malloc(sizeof(Process_t));
         if (NULL == temp->next) exit(0);
