@@ -83,7 +83,7 @@ int main (int argc, const char * argv[])
                 if (0 < runningTime)
                 {
                     printf("PID %s running for %ds.\n",
-                           cmd.argv[1],runningTime); 
+                           *cmd.argv[1],runningTime); 
                 }
                 else
                 {

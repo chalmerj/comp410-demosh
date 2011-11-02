@@ -48,7 +48,7 @@ typedef struct builtins_s {
 typedef struct command_s {
     char *command;
     int argc;
-    char *argv[MAX_ARGS];
+    char **argv[MAX_ARGS];
     int cmdCode;
 }Command_t;
 
