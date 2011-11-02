@@ -89,6 +89,7 @@ int main (int argc, const char * argv[])
                 {
                     printf("Time Error\n");
                 }
+                break;
             
             case CMD_HELP:
                 printf("List of Commands:\n");
@@ -100,6 +101,7 @@ int main (int argc, const char * argv[])
                 printf("kill PID - terminates thread PID.\n");
                 printf("exit - exit the program.\n");
                 printf("help  - print this help.\n");
+                break;
                 
                 
             default:
