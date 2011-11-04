@@ -51,7 +51,7 @@ int main (int argc, const char * argv[])
         //Parse the command input
         parseInput(buffer, &cmd);
         
-        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
+//        printf("Command: %s\nNum. Args: %d\n",cmd.command, cmd.argc);
 //        printf("Command Code:%d\n",cmd.cmdCode);
         
         switch (cmd.cmdCode)

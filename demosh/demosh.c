@@ -134,22 +134,18 @@ void list(Process_t *root)
     Process_t *current;
     current = (NULL != root)?root:NULL;
     
-    
-    printf("Command\t\tArgument\t\tPID\t\t\tStart\n");
+    printf("Command\t\tArgument\tPID\t\tStart\n");
     
     while(current)
     {
         printf("%s\t\t",current->command);
         
         if (NULL != current->argv)
-        {
-            char *argv = current->argv[1];
-            printf("%-8s\t\t", argv);
-        }
+            printf("%s\t\t",current->argv[1]);
         else
-            printf("(tophat)\t\t");
+            printf("(none)\t\t");
         
-        printf("%-6i\t\t",current->pid);
+        printf("%i\t\t",current->pid);
         printf("%ld\n",current->start);
         
         current = current->next;
