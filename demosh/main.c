@@ -63,7 +63,7 @@ int main (int argc, const char * argv[])
                 return 0;
             
             case CMD_LIST:
-                list(psList);
+                printList(psList);
                 break;
             
             case CMD_SLEEP:

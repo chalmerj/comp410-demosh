@@ -129,7 +129,7 @@ Process_t *createProcess(Process_t *root, char *command,
  *
  */
 
-void list(Process_t *root)
+void printList(Process_t *root)
 {
     Process_t *current;
     current = (NULL != root)?root:NULL;

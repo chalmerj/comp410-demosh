@@ -19,11 +19,10 @@
 
 #define MAX_BUFFER 256
 #define MAX_ARGS 32
-#define ARR_SIZE 256
 #define DELIMS " \t\r\n"
 
 /* 
- * The demo shell has a fixed number of commands and no environment.
+ * The demo shell has a fixed number of commands and no environment variables.
  * I pre-define the 'Command Code' of each command, to enable use of a 'switch'
  * statement in the main loop. The built-in commands are assembled into a 
  * struct containing their name and code.
@@ -42,12 +41,27 @@
 #define NUM_CMDS 8
 
 
+/* The global struct containing the built-in commands and codes for demosh. */
+
 typedef struct builtins_s {
     char cmdName[MAX_BUFFER];
     int cmdCode;
 }Builtins_t;
 
+Builtins_t cmdList[NUM_CMDS] = {
+    {"exit", CMD_EXIT},
+    {"sleep", CMD_SLEEP},
+    {"list", CMD_LIST},
+    {"wait", CMD_WAIT},
+    {"wait-list", CMD_WAITLIST},
+    {"time", CMD_TIME},
+    {"kill", CMD_KILL},
+    {"help", CMD_HELP}
+};
+
+
 /*
+ * The command_t stuct: 
  * Each user entry is stored in this struct. The struct holds three items:
  * -- The string name of the command (also in argv[0]);
  * -- An int count of each word of command input (size of argv);
@@ -96,6 +110,6 @@ int cmdSleep(Process_t *psList, Command_t *cmd);
 Process_t *createProcess(Process_t *root, char *command, 
                          char **argv, pid_t pid, time_t start);
 
-void list(Process_t *root);
+void printList(Process_t *root);
 
 int cmdTime(Process_t * psList, Command_t *cmd);
