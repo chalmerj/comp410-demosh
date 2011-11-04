@@ -18,8 +18,10 @@
 
 #include "demosh.h"
 
-
-/* A global struct containing the built-in commands and codes for demosh. */
+/*
+ * Definition of the global builtins_t struct. Follows the #defines
+ * in the header file. 
+ */
 
 Builtins_t cmdList[NUM_CMDS] = {
     {"exit", CMD_EXIT},

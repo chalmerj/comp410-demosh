@@ -48,18 +48,6 @@ typedef struct builtins_s {
     int cmdCode;
 }Builtins_t;
 
-Builtins_t cmdList[NUM_CMDS] = {
-    {"exit", CMD_EXIT},
-    {"sleep", CMD_SLEEP},
-    {"list", CMD_LIST},
-    {"wait", CMD_WAIT},
-    {"wait-list", CMD_WAITLIST},
-    {"time", CMD_TIME},
-    {"kill", CMD_KILL},
-    {"help", CMD_HELP}
-};
-
-
 /*
  * The command_t stuct: 
  * Each user entry is stored in this struct. The struct holds three items:
@@ -81,7 +69,7 @@ typedef struct command_s {
  */
 
 typedef struct process {
-    struct process *next;   // Pointer to next process in the list. Parent is root.
+    struct process *next;   // Pointer to next process in the list.
     char *command;          // Command string used to start the process
     char **argv;            // Argument Vector used for exec-ing the process
     pid_t pid;              // Process ID
@@ -98,18 +86,18 @@ typedef struct process {
 /* 
  * parseInput uses strsep() to parse the input line into an argument vector.
  * The first item (argv[0]) is the actual name of the command. 
- * The name of the command is passed to getCommandCode which returns the int value
- * of the command, or 0 if the command is not found.
+ * The name of the command is passed to getCommandCode which returns 
+ * the int value of the command, or 0 if the command is not found.
  */
 
 void parseInput(char *input, Command_t *cmds);
+
 int getCommandCode(char *commandName);
 
 int cmdSleep(Process_t *psList, Command_t *cmd);
 
 Process_t *createProcess(Process_t *root, char *command, 
                          char **argv, pid_t pid, time_t start);
-
 void printList(Process_t *root);
 
 int cmdTime(Process_t * psList, Command_t *cmd);
