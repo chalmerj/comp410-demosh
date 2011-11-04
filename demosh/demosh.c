@@ -54,7 +54,7 @@ void parseInput(char *input, Command_t *cmds)
     
     cmds->argc = count;
     cmds->argv[count] = NULL;
-    cmds->command = *cmds->argv[0];
+    cmds->command = cmds->argv[0];
     cmds->cmdCode = getCommandCode(cmds->command);
     
 }
