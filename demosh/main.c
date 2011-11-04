@@ -33,7 +33,7 @@ int main (int argc, const char * argv[])
     
     memset((void *)&psList, 0, sizeof(psList));
     
-    psList = createProcess(psList, "Parent", NULL, getpid(), time(NULL));
+    psList = createProcess(psList, "Parent",0, NULL, getpid(), time(NULL),0);
         
        
     //pid_t   pid = 0;

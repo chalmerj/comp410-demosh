@@ -87,8 +87,8 @@ int getCommandCode(char *commandName)
  *
  */
 
-Process_t *createProcess(Process_t *root, char *command, 
-                         char **argv, pid_t pid, time_t start)
+Process_t *createProcess(Process_t *root, char *command, int argc, 
+                         char *argv[], pid_t pid, time_t start, int status)
 {
     Process_t  *temp;
     
@@ -99,7 +99,7 @@ Process_t *createProcess(Process_t *root, char *command,
         
         root->next = NULL;
         root->command = command;
-        root->argv = argv;
+        memset(root->argv, 0, sizeof(root->argv));
         root->pid = pid;
         root->start = start;
         root->completed = 0;
@@ -116,7 +116,7 @@ Process_t *createProcess(Process_t *root, char *command,
         
         temp = temp->next;
         temp->command = command;
-        temp->argv = argv;
+        memcpy(temp->argv, argv, ((size_t)argc*(sizeof(char*))));
         temp->pid = pid;
         temp->start = start;
         temp->completed = 0;
@@ -136,19 +136,20 @@ void printList(Process_t *root)
     Process_t *current;
     current = (NULL != root)?root:NULL;
     
-    printf("Command\t\tArgument\tPID\t\tStart\n");
+    printf("Command\t\tArgument\tPID\t\tStart\t\tStatus\n");
     
     while(current)
     {
         printf("%s\t\t",current->command);
         
-        if (NULL != current->argv)
-            printf("%s\t\t",current->argv[1]);
+        if (NULL != current->argv[1])
+            printf("%-6s\t\t",current->argv[1]);
         else
-            printf("(none)\t\t");
+            printf("None\t\t");
         
-        printf("%i\t\t",current->pid);
-        printf("%ld\n",current->start);
+        printf("%i\t",current->pid);
+        printf("%ld\t",current->start);
+        printf("%i\n",current->status);
         
         current = current->next;
         
@@ -187,19 +188,29 @@ int cmdSleep(Process_t *psList, Command_t *cmd)
             printf("Failed to fork process\n");
             return 1;
         }
-        // We're the child process
-        if (0 == pid)
-        {
-            sleep(*cmd->argv[1]);
-            exit(0);
-        }
         //We're the parent process
-        else if (pid > 0)
+        if (pid > 0)
         {
+            int status;
+            waitpid(pid, &status, WNOHANG);
             time(&startTime);
-            //printf("Sleep Arg %s\n",cmd->argv[1]);
-            createProcess(psList, cmd->command, cmd->argv, pid,startTime );
+            //printf("Sleep Arg %s\n",cmd->argv[1]);            
+            createProcess(psList, cmd->command,cmd->argc, cmd->argv, pid,startTime,status );
+            
+            return 0;
         }
+        
+        // We're the child process
+        
+        else if (0 == pid)
+        {
+            int childPID = getpid();
+            long sleepTime = strtol(cmd->argv[1], NULL, 10);
+            printf("\nChild %i sleeping for %lds.\n",childPID,sleepTime);
+            sleep(sleepTime);
+            return 0;
+        }
+
         
         else
         {

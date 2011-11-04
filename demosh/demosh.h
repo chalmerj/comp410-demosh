@@ -71,7 +71,8 @@ typedef struct command_s {
 typedef struct process {
     struct process *next;   // Pointer to next process in the list.
     char *command;          // Command string used to start the process
-    char **argv;            // Argument Vector used for exec-ing the process
+    int argc;
+    char *argv[MAX_ARGS];   // Argument Vector used for exec-ing the process
     pid_t pid;              // Process ID
     time_t start;           // Timestamp (in seconds) of process start
     char completed;         // True if process has completed
@@ -96,8 +97,9 @@ int getCommandCode(char *commandName);
 
 int cmdSleep(Process_t *psList, Command_t *cmd);
 
-Process_t *createProcess(Process_t *root, char *command, 
-                         char **argv, pid_t pid, time_t start);
+Process_t *createProcess(Process_t *root, char *command,int argc,
+                         char *argv[], pid_t pid, time_t start, int status);
+
 void printList(Process_t *root);
 
 int cmdTime(Process_t * psList, Command_t *cmd);
